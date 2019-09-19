@@ -26,7 +26,6 @@ for ip in ipaddress.ip_network(str(ip_range)):
 allHosts.pop(0)
 del allHosts[-1]
 
-#hosts = '10.103.36.87'
 onlineHosts =[]
 for hosts in allHosts:
     url="https://" + str(hosts) + "/"
