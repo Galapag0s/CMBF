@@ -24,15 +24,15 @@ url="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
 data = {
     'login': 'admin',
     'account': 'admin',
-    'password':'admin'
+    'password':'admin',
+    'Login.x':'56',
+    'Login.y':'16'
+
 }
 
 login = requests.post(url = url, data = data, verify=False)
-if login.history:
-    print("Request was redirected")
-    for resp in login.history:
-        print(resp.status_code + ", " + resp.url)
-    print("Final destination:")
-    print(login.status_code + ", " + login.url)
-else:
-    print("Request was not redirected")
+print(login.text)
+cookieStart=login.text.split("document.write(\"<form name=\'form0\' action=\'/cgi-bin/reboot.cgi?lang=en&")
+cookieMid=cookieStart[1].split("'")
+cookie=cookieMid[0]
+print(cookie)
