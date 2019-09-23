@@ -16,6 +16,9 @@ import ipaddress
 import hashlib
 import time
 import random
+import urllib3
+
+urllib3.disable_warnings()
 
 #Create list to hold all possible hosts on the network
 allHosts=[]
@@ -46,14 +49,14 @@ for hosts in allHosts:
         print(systemOnline.hexdigest())
         hashVal='8805829fe41105187d46c8b7d18f6baa'
         #Checks if Response is Same As Known Projector Samples
-        if(systemOnline.hexdigest() == hashVal):
-            print(url)
+        if(systemOnline):
+            print("PROJECTOR: " + url)
             onlineHosts.append(hosts)
         #Generate a random wait time
-        waitTime = random.random() * 4.0
+        waitTime = random.random() * 3.0
         #Wait the Random Time (This is done to try to Look less suspicious to Firewalls
         time.sleep(waitTime)
     #Handle Any Exceptions (Generally Caused by Port being closed
     except requests.exceptions.RequestException as e:
-        pass
+        print(url + " Is Not A Projector")
 print(onlineHosts)
