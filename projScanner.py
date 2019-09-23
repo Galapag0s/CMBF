@@ -55,5 +55,5 @@ for hosts in allHosts:
         time.sleep(waitTime)
     #Handle Any Exceptions (Generally Caused by Port being closed
     except requests.exceptions.RequestException as e:
-        print("Go Fuck Youreself")
+        pass
 print(onlineHosts)
