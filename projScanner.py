@@ -37,7 +37,7 @@ onlineHosts =[]
 #Send HTTPS requests to See if port is open
 for hosts in allHosts:
     url="https://" + str(hosts) + "/"
-    print(url)
+    #print(url)
     try:
         #Sends Rquest
         check = requests.get(url = url, timeout=5,verify=False)
@@ -47,6 +47,7 @@ for hosts in allHosts:
         hashVal='8805829fe41105187d46c8b7d18f6baa'
         #Checks if Response is Same As Known Projector Samples
         if(systemOnline.hexdigest() == hashVal):
+            print(url)
             onlineHosts.append(hosts)
         #Generate a random wait time
         waitTime = random.random() * 4.0
