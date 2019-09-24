@@ -15,6 +15,30 @@ import random
 import urllib3
 
 urllib3.disable_warnings()
+def AdminLogin(host,username,password):
+    print("Trying to login now")
+
+    #URL of Projector
+    url="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
+
+    #POST Data
+    data = {
+        'login': username,
+        'account': password,
+        'password': password,
+        'Login.x':'56',
+        'Login.y':'16'
+
+    }
+
+    #Send Login Request
+    login = requests.post(url = url, data = data, verify=False)
+
+    #Pull Out Cookie So You Can Keep Making Requests
+    cookieStart=login.text.split("document.write(\"<form name=\'form0\' action=\'/cgi-bin/reboot.cgi?lang=en&")
+    cookieMid=cookieStart[1].split("'")
+    cookie=cookieMid[0]
+    return cookie
 
 def ToggleRemote(host, cookie):
     #Turn Remove View Off
