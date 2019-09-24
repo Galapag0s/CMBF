@@ -12,6 +12,9 @@
 
 import requests
 import random
+import urllib3
+
+urllib3.disable_warnings()
 
 print("Trying to login now")
 
@@ -44,7 +47,7 @@ cookieMid=cookieStart[1].split("'")
 cookie=cookieMid[0]
 print(cookie)
 
-action="BootCycle"
+action="ChangePass"
 if action == "Remote":
     #Turn Remove View Off
     url = "https://"+ host + "/cgi-bin/return.cgi"
@@ -84,3 +87,11 @@ elif action == "BootCycle":
                "command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
             }
             remoteViewOn = requests.post(url=url,data=data, verify=False)
+elif action == "ChangePass":
+    newPass = "Asteroid01"
+    url = "https://"+ host + "/cgi-bin/return.cgi"
+    data = {
+        "command"	:"<Send><seid>" + cookie + "</seid><name>LONG_ADMIN_PWD</name><value>" + newPass + "</value></Send>"
+    }
+    changePass = requests.post(url=url,data=data, verify=False)
+    print("Password Change Request Sent")
