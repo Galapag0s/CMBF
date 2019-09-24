@@ -23,8 +23,8 @@ def AdminLogin(host,username,password):
 
     #POST Data
     data = {
-        'login': username,
-        'account': password,
+        'login': 'admin',
+        'account': username,
         'password': password,
         'Login.x':'56',
         'Login.y':'16'
