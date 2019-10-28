@@ -13,13 +13,11 @@ import urllib3
 
 urllib3.disable_warnings()
 
-host = "10.103.36.85"
-username = "admin"
-password = "password"
-newPass = "password1"
+
 #host is projector, username generally admin, password generally admin
 def AdminLogin(host,username,password):
     print("Trying to login.")
+
 
     url = "https://" + host + "/userlogin.html"
 
@@ -33,6 +31,11 @@ def AdminLogin(host,username,password):
     login = requests.post(url=url, data=data, verify=False)
 
     cookies = login.cookies
+
+    print(cookies)
+
+    ###need to parse cookies
+
 
     return cookies
 
@@ -58,17 +61,27 @@ def Reboot(host, cookies):
 # host is the target, cookie is cookie from AdminLogin,newPass is the pass you want to change it to
 def ChangePass(host, cookies, newPass):
     url = "https://" + host + "/Device/Authentication/"
+
     data = {
         "Name": "admin",
         "Password": newPass
     }
     changePass = requests.post(url=url, data=data, verify=False, cookies=cookies)
+    print(changePass.status_code)
+    print(changePass.text)
     print("Password Change Request Sent")
 
 
 def main():
-    AdminLogin(host,username,password)
-    ChangePass(host,cookies,newPass)
+    host = "10.103.36.85"
+    username = "admin"
+    password = "password"
+    newPass = "password1"
 
-if __name__== "_main_":
+
+    ChangePass(host,AdminLogin(host,username,password),newPass)
+
+
+
+if __name__== "__main__":
     main()
