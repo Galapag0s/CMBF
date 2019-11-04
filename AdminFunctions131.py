@@ -24,13 +24,15 @@ def AdminLogin(host,username,password):
         'login': 'admin',
         'passwd': 'password'
     }
-
+    
     # Send Login Request
     login = requests.post(url=url, data=data, verify=False)
 
-    cookies = login.cookies
+    cookieString = str(login.cookies)
+    cookMid = cookieString.split(" ")
+    cookie = cookMid[1]
 
-    return cookies
+    return cookie
 
 # host is the target, cookie is cookie from AdminLogin, loop is True or False
 def Reboot(host, cookie):
