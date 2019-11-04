@@ -33,7 +33,10 @@ data={
 
 #Send login request
 login = requests.post(url=url, data=data, verify=False)
-cookies = login.cookies
+cookieString = str(login.cookies)
+cookMid = cookieString.split(" ")
+cookie = cookMid[1]
+print(cookie)
 
 action="ChangePass"
 if action == "Reboot":
