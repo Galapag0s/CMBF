@@ -14,21 +14,33 @@ import urllib3
 urllib3.disable_warnings()
 
 # host is projector, username generally admin, password generally admin
+host = "10.103.36.88"
+getURL = "https://" + host + "/"
+get = requests.get(url=getURL, verify=False)
+
+print(get.status_code)
+
+cookieString = str(get.cookies)
+cookMid = cookieString.split(" ")
+cookie = cookMid[1]
+
+cookie = cookie.split("=")
+cookieDict = {}
+cookieDict[cookie[0]] = cookie[1]
+
+
 
 print("Trying to Reboot.")
-
-host = "10.103.36.88"
 
 data = {
     b"{Device: {DeviceOperations: {Reboot: true}}}"
 }
 
-
-url = "https://" + host + "/Device/DeviceOperations"
+postURL = "https://" + host + "/Device/DeviceOperations"
 
 # Send Login Request
-reboot = requests.post(url=url, data=data, verify=False)
-print (reboot.status_code)
+reboot = requests.post(url=postURL, data=data,  verify=False, cookies=cookieDict)
 
+print(reboot.status_code)
 
 
