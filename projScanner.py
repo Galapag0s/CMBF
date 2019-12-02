@@ -47,16 +47,15 @@ for hosts in allHosts:
         #Grabs Hash of Request
         systemOnline = hashlib.md5(check.text.encode())
         print(systemOnline.hexdigest())
-        hashVal='8805829fe41105187d46c8b7d18f6baa'
         #Checks if Response is Same As Known Projector Samples
         if(systemOnline):
             print("PROJECTOR: " + url)
-            onlineHosts.append(hosts)
+            onlineHosts.append(str(ipaddress.IPv4Address(hosts)))
         #Generate a random wait time
-        waitTime = random.random() * 3.0
+        #waitTime = random.random() * 3.0
         #Wait the Random Time (This is done to try to Look less suspicious to Firewalls
-        time.sleep(waitTime)
+        #time.sleep(waitTime)
     #Handle Any Exceptions (Generally Caused by Port being closed
     except requests.exceptions.RequestException as e:
-        print(url + " Is Not A Projector")
+        pass
 print(onlineHosts)
