@@ -7,9 +7,11 @@ Creston Projector Botnet Framework
 ## How To Use
 ### Commands
 #### help [command]
-  - Display a help menu which lists all available commands
-  - If a command is provided, it will supply additional information about the command
-#### network_scan
+  - Display a help menu which lists all available commands.
+  - If a command is provided, it will supply additional information about the command.
+#### network_scan [ip range]
+  - This function will scan the ip range that is given to the function.
+  - The IP range should be passed in as CIDR notation.
 #### add_host
 #### print_hosts
 #### model_scan
