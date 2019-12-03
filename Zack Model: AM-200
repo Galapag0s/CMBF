@@ -1,0 +1,11 @@
+import requests
+
+#Reboot device
+def Reboot(host):
+    data = {"Device": {"DeviceOperations": {"Reboot": "true"}}}
+    request = requests.post(url="http://" + host + "/Device/DeviceOperations", json=data, verify=False)
+
+#Restore device
+def Restore(host):
+    data = {"Device": {"DeviceOperations": {"Restore": "true"}}}
+    request = requests.post(url="http://" + host + "/Device/DeviceOperations", json=data, verify=False)
