@@ -6,8 +6,9 @@ Creston Projector Botnet Framework
 - Code Explanationo/Logic
 ## How To Use
 ### Commands
-#### help
-  - Display a help menu
+#### help [command]
+  - Display a help menu which lists all available commands
+  - If a command is provided, it will supply additional information about the command
 ## Important Dates
 ### First Contact
 - Mid September
