@@ -5,6 +5,9 @@ Creston Projector Botnet Framework
 - Tool documentation
 - Code Explanationo/Logic
 ## How To Use
+### Commands
+####help
+  - Display a help menu
 ## Important Dates
 ### First Contact
 - Mid September
