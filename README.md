@@ -9,6 +9,18 @@ Creston Projector Botnet Framework
 #### help [command]
   - Display a help menu which lists all available commands
   - If a command is provided, it will supply additional information about the command
+#### network_scan
+#### add_host
+#### print_hosts
+#### model_scan
+#### print_model
+#### reboot
+#### pass_change
+#### host_name
+#### restore
+#### web_dos
+#### code_cycle
+
 ## Important Dates
 ### First Contact
 - Mid September
