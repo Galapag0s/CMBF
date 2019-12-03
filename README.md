@@ -49,3 +49,8 @@ Creston Projector Botnet Framework
 - December
   - Presented Script and Attacked Several Machines
 ## Code Explanation
+### gui.py
+This code contains all the user interface options you are presented with.  This user interface interfaces with the creston module to run all necessary commands.
+### creston.py
+This code contains the actual functions used by the user interface.  This package will take various inputs, and perform actions on the projectors based on the IP.
+
