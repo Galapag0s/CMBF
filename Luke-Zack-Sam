@@ -1,9 +1,0 @@
-import requests
-
-data = {"Device": {"DeviceOperations": {"Reboot": "true"}}}
-print(data)
-
-request = requests.post(url="http://10.103.36.91/Device/DeviceOperations", json=data)
-
-print(request.status_code)
-print(request.text)
