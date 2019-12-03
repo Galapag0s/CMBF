@@ -10,9 +10,11 @@ Creston Projector Botnet Framework
   - Display a help menu which lists all available commands.
   - If a command is provided, it will supply additional information about the command.
 #### network_scan [ip range]
-  - This function will scan the ip range that is given to the function.
+  - This function will scan the ip range that is given to the function.  The results will be stored by the system for the duration of the session.
   - The IP range should be passed in as CIDR notation.
-#### add_host
+#### add_host [ip]
+  - This command can be used to add a projector manually.
+  - The ips must be passed one at a time.
 #### print_hosts
 #### model_scan
 #### print_model
