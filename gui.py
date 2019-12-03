@@ -47,7 +47,6 @@ while True:
 		print(" print_model..... This will display all live hosts")
 		print(" reboot.......... This will take begin rebooting the devices")
 		print(" pass_change..... This will change the current password")
-		print(" host_name....... This will change the host name of the device")
 		print(" restore......... This will restore the device to factory settings")
 		print(" web_dos......... This will begin sending web requests to the target device")
 		print(" code_cycle...... This will being causing the connect code to change\n")
@@ -81,10 +80,6 @@ while True:
 			print(" This function will change the password of live hosts")
 			print(" To run, type \'pass_change\' followed by a username, the password, and the new password")
 			print(" Example: pass_change username oldpass newpass\n")
-		elif 'host_name' in command_input:
-			print(" This function will change the hostname of a specified host")
-			print(" To run, type \'host_name\' followed by the target ip and the new hostname")
-			print(" Example: host_name 10.10.10.10 newhostname\n")
 		elif 'restore' in command_input:
 			print(" This function will restore the device to factor default")
 			print(" To run, type \'restore\' followed by the targer ip")
@@ -137,12 +132,6 @@ while True:
 				creston.change_pass(hosts,model_dict[hosts],username,password,newpass)
 			else:
 				pass
-
-	elif command_input[:10] == 'host_name':
-		command_input = command_input.split(" ")
-		hostname = command_input[1]
-		for hosts in model_dict:
-			creston.host_name(hosts,hostname)
 
 	elif command_input[:7] == 'restore':
 		for hosts in model_dict:
