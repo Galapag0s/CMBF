@@ -65,3 +65,4 @@ This code contains all the user interface options you are presented with.  This 
 ### creston.py
 This code contains the actual functions used by the user interface.  This package will take various inputs, and perform actions on the projectors based on the IP.
 
+For a more indepth explanation, see the source code comments.
