@@ -30,7 +30,7 @@ def printAsciiTitle():
 printAsciiTitle()
 
 #Print the welcome message cause we are cordial and polite
-print(" Welcome to the Creston Projector Attack Framework")
+print(" Welcome to the Creston Projector Botnet Framework")
 print(" To start type a command, or type \'help\' to see available options")
 print(" To learn more about a command type \'help [command]\'")
 
