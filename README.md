@@ -1,5 +1,5 @@
 # CMBF
-Creston Projector Botnet Framework
+Creston Management Botnet Framework
 ## Table Of Contents
 - Introduction
 - Tool documentation
